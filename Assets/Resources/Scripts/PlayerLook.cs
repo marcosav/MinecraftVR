@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.XR;
 
 public class PlayerLook : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     public MinecraftVR controls;
 
     public Transform cam;
@@ -14,9 +18,8 @@ public class PlayerLook : MonoBehaviour
     private float headRotation = 0f;
     private readonly float headRotationLimit = 90f;
 
-    void Start() {
-        if (Application.platform == RuntimePlatform.Android)
-            sensitivity *= 2;
+    void Start()
+    {
     }
 
     protected void Awake()
@@ -45,4 +48,6 @@ public class PlayerLook : MonoBehaviour
         headRotation = Mathf.Clamp(headRotation, -headRotationLimit, headRotationLimit);
         cam.localEulerAngles = new Vector3(headRotation, 0f, 0f);
     }
+
+#endif
 }

@@ -51,7 +51,13 @@ public class PlayerMovement : MonoBehaviour
         bool sprint = controls.Player.Sprint.ReadValue<float>() == 1;
         bool jump = controls.Player.Jump.ReadValue<float>() == 1;
 
-        Vector3 dir = transform.right * x + transform.forward * z;
+#if UNITY_EDITOR
+        Vector3 dir = Camera.main.transform.right * x + Camera.main.transform.forward * z;
+#else
+        var c = GvrVRHelpers.GetHeadRotation();
+        Vector3 dir = c * Vector3.right * x + c * Vector3.forward * z;
+#endif
+
         bool grounded = IsOnGround();
 
         if (!grounded)

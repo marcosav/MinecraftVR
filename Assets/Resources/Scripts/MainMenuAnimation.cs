@@ -5,7 +5,7 @@ using UnityEngine.XR;
 
 public class MainMenuAnimation : MonoBehaviour
 {
-    private readonly float angularSpeed = .5f;
+    private readonly float angularSpeed = .2f;
     private readonly Vector3 scale = new Vector3(25, 10);
 
     private Vector3 fixedPoint;
