@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.XR;
+﻿using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {

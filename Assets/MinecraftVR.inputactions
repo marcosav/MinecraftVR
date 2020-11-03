@@ -36,6 +36,22 @@
                     "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Mine",
+                    "type": "Button",
+                    "id": "c033d684-09ac-4503-9293-90a24f51c2b7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Place",
+                    "type": "Button",
+                    "id": "d7b47615-de8e-443b-9ade-bdd982b4f8d4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -234,6 +250,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51f0eef7-8fbe-4dc3-9f49-4d1076ebbc2d",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Mine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95a21c33-6379-4491-9242-2d3bdd8da062",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Mine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "87a34c9f-7595-4728-a332-a3ec73387b82",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e0f1078-503a-4f3c-a0d1-5ac17f41347d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Place",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

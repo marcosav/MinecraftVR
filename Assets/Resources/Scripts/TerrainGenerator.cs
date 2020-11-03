@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public readonly int chunkRenderDist = 6;
-    public readonly int chunkKeepDist = 3;
+    public const int chunkRenderDist = 6;
+    public const int chunkKeepDist = 3;
+
+    private TerrainPersistor persistor;
 
     public GameObject terrainChunk;
     public Transform player;
@@ -24,7 +26,10 @@ public class TerrainGenerator : MonoBehaviour
 
     void Start()
     {
-        noise = new FastNoiseLite(Random.Range(0, 100000));
+        persistor = GetComponent<TerrainPersistor>();
+        persistor.Init();
+
+        noise = new FastNoiseLite(persistor.GetSeed());
         noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 
         Task.Factory.StartNew(BuildTask);
@@ -36,28 +41,36 @@ public class TerrainGenerator : MonoBehaviour
     {
         while (true)
         {
-            ChunkBuildJob job;
+            try
+            {
+                if (!computeChunkQueue.TryDequeue(out ChunkBuildJob job))
+                    continue;
 
-            if (!computeChunkQueue.TryDequeue(out job))
-                continue;
+                job.chunk.Blocks = persistor.GetBlocksFor(job.pos, GenerateBlockDistribution);
 
-            float height;
-
-            for (int x = 0; x < TerrainChunk.CHUNK_SIZE + 2; x++)
-                for (int z = 0; z < TerrainChunk.CHUNK_SIZE + 2; z++)
-                {
-                    height = ComputeHeightAt(job.pos.x + x - 1, job.pos.z + z - 1);
-                    for (int y = 0; y < TerrainChunk.CHUNK_HEIGHT; y++)
-                        job.chunk.blocks[x, y, z] = height < y ? 0 : 1;
-                }
-
-            /*for (int x = 0; x < TerrainChunk.CHUNK_SIZE + 2; x++)
-                for (int z = 0; z < TerrainChunk.CHUNK_SIZE + 2; z++)
-                    for (int y = 0; y < TerrainChunk.CHUNK_HEIGHT; y++)
-                        job.chunk.blocks[x, y, z] = GetBlockType(job.pos.x + x - 1, y, job.pos.z + z - 1);*/
-
-            buildChunkQueue.Enqueue(job);
+                buildChunkQueue.Enqueue(job);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex);
+            }
         }
+    }
+
+    private BlockDistribution GenerateBlockDistribution(ChunkPos pos)
+    {
+        float height;
+        BlockDistribution blocks = new BlockDistribution();
+
+        for (int x = 0; x < TerrainChunk.CHUNK_SIZE + 2; x++)
+            for (int z = 0; z < TerrainChunk.CHUNK_SIZE + 2; z++)
+            {
+                height = ComputeHeightAt(pos.x + x - 1, pos.z + z - 1);
+                for (int y = 0; y < TerrainChunk.CHUNK_HEIGHT; y++)
+                    blocks[x, y, z] = height < y ? BlockType.Air : BlockType.Grass;
+            }
+
+        return blocks;
     }
 
     void BuildChunk(ChunkPos pos)
@@ -80,7 +93,7 @@ public class TerrainGenerator : MonoBehaviour
 
     void LoadChunks()
     {
-        ChunkPos playerChunk = GetChunkFromLocation(player.position);
+        ChunkPos playerChunk = GetChunkPosition(player.position);
 
         if (!curChunk.Equals(playerChunk))
         {
@@ -128,8 +141,7 @@ public class TerrainGenerator : MonoBehaviour
 
     IEnumerator DelayBuildChunks()
     {
-        ChunkBuildJob job;
-        while (buildChunkQueue.TryDequeue(out job))
+        while (buildChunkQueue.TryDequeue(out ChunkBuildJob job))
         {
             job.chunk.BuildMesh();
             chunks[job.pos] = job.chunk;
@@ -140,12 +152,17 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    private ChunkPos GetChunkFromLocation(Vector3 loc)
+    public ChunkPos GetChunkPosition(Vector3 loc)
     {
         int x = Mathf.FloorToInt(loc.x / TerrainChunk.CHUNK_SIZE) * TerrainChunk.CHUNK_SIZE;
         int z = Mathf.FloorToInt(loc.z / TerrainChunk.CHUNK_SIZE) * TerrainChunk.CHUNK_SIZE;
 
         return new ChunkPos(x, z);
+    }
+
+    public TerrainChunk GetChunkAt(ChunkPos loc)
+    {
+        return chunks[loc];
     }
 
     float ComputeHeightAt(int x, int z)

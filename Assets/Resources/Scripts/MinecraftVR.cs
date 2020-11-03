@@ -49,6 +49,22 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Integer"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Mine"",
+                    ""type"": ""Button"",
+                    ""id"": ""c033d684-09ac-4503-9293-90a24f51c2b7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Place"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7b47615-de8e-443b-9ade-bdd982b4f8d4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -247,6 +263,50 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51f0eef7-8fbe-4dc3-9f49-4d1076ebbc2d"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Mine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95a21c33-6379-4491-9242-2d3bdd8da062"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Mine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87a34c9f-7595-4728-a332-a3ec73387b82"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e0f1078-503a-4f3c-a0d1-5ac17f41347d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Place"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -850,6 +910,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Mine = m_Player.FindAction("Mine", throwIfNotFound: true);
+        m_Player_Place = m_Player.FindAction("Place", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
@@ -915,6 +977,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Mine;
+    private readonly InputAction m_Player_Place;
     public struct PlayerActions
     {
         private @MinecraftVR m_Wrapper;
@@ -923,6 +987,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Mine => m_Wrapper.m_Player_Mine;
+        public InputAction @Place => m_Wrapper.m_Player_Place;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -944,6 +1010,12 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                @Mine.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMine;
+                @Mine.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMine;
+                @Mine.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMine;
+                @Place.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
+                @Place.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
+                @Place.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -960,6 +1032,12 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @Mine.started += instance.OnMine;
+                @Mine.performed += instance.OnMine;
+                @Mine.canceled += instance.OnMine;
+                @Place.started += instance.OnPlace;
+                @Place.performed += instance.OnPlace;
+                @Place.canceled += instance.OnPlace;
             }
         }
     }
@@ -1120,6 +1198,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnMine(InputAction.CallbackContext context);
+        void OnPlace(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
