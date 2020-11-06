@@ -24,7 +24,11 @@ using UnityEngine;
 /// </summary>
 public class CameraPointer : MonoBehaviour
 {
-    public float _maxDistance = 10;
+
+    public float maxDistance = 10;
+
+#if !UNITY_EDITOR
+
     private GameObject _gazedAtObject = null;
 
     /// <summary>
@@ -34,8 +38,7 @@ public class CameraPointer : MonoBehaviour
     {
         // Casts ray towards camera's forward direction, to detect if a GameObject is being gazed
         // at.
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, _maxDistance))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxDistance))
         {
             // GameObject detected in front of the camera.
             if (_gazedAtObject != hit.transform.gameObject)
@@ -43,7 +46,7 @@ public class CameraPointer : MonoBehaviour
                 // New GameObject.
                 _gazedAtObject?.SendMessage("OnPointerExit", new GvrPointerEventData(null));
                 _gazedAtObject = hit.transform.gameObject;
-                _gazedAtObject.SendMessage("OnPointerEnter", new GvrPointerEventData(null));
+                _gazedAtObject?.SendMessage("OnPointerEnter", new GvrPointerEventData(null));
             }
         }
         else
@@ -59,4 +62,5 @@ public class CameraPointer : MonoBehaviour
             _gazedAtObject?.SendMessage("OnPointerClick", new GvrPointerEventData(null));
         }
     }
+#endif
 }

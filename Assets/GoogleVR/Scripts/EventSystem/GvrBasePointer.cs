@@ -842,7 +842,8 @@ public abstract class GvrBasePointer : MonoBehaviour, IGvrControllerInputDeviceR
 
             // Cardboard button events come through as mouse button 0 and are
             // mapped to TouchPadButton.
-            if (Input.GetMouseButtonDown(0))
+            // We're using new input system
+            /*if (Input.GetMouseButtonDown(0))
             {
                 buttonDown |= GvrControllerButton.TouchPadButton;
             }
@@ -850,7 +851,7 @@ public abstract class GvrBasePointer : MonoBehaviour, IGvrControllerInputDeviceR
             if (Input.GetMouseButtonUp(0))
             {
                 buttonUp |= GvrControllerButton.TouchPadButton;
-            }
+            }*/
 
             if (ControllerInputDevice != null)
             {

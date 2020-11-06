@@ -9,14 +9,21 @@ public abstract class ColliderClick : MonoBehaviour
 
     public void WasClicked()
     {
-        string str = "Click " + gameObject.name;
-        Debug.Log(str);
+        /*string str = "Click " + gameObject.name;
+        Debug.Log(str);*/
+        blocked = true;
+
+        if (isLooked)
+            OnExit();
 
         OnClick();
+
+        blocked = false;
     }
 
     public abstract void OnClick();
 
+    private bool blocked = false;
     private bool isLooked = false;
     public float timerDuration = 2f;
     private float lookTimer = 0f;
@@ -29,7 +36,7 @@ public abstract class ColliderClick : MonoBehaviour
             if (lookTimer > timerDuration)
             {
                 lookTimer = 0f;
-                Debug.Log("Object timer click");
+                //Debug.Log("Object timer click");
                 WasClicked();
             }
         }
@@ -40,14 +47,19 @@ public abstract class ColliderClick : MonoBehaviour
     }
     public void setIsLooked(bool looked)
     {
+        if (blocked)
+            return;
+
         if (looked)
             OnEnter();
         else
             OnExit();
-            
+
         isLooked = looked;
     }
 
     public virtual void OnEnter() { }
     public virtual void OnExit() { }
+
+    void OnDisable() => OnExit();
 }

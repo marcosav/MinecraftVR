@@ -65,6 +65,14 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""89e49b59-7aa6-4483-a11a-51e527365de0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -307,6 +315,17 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68fe7228-2182-4661-9112-963b24b82bad"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -912,6 +931,7 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Mine = m_Player.FindAction("Mine", throwIfNotFound: true);
         m_Player_Place = m_Player.FindAction("Place", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
@@ -979,6 +999,7 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Mine;
     private readonly InputAction m_Player_Place;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @MinecraftVR m_Wrapper;
@@ -989,6 +1010,7 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Mine => m_Wrapper.m_Player_Mine;
         public InputAction @Place => m_Wrapper.m_Player_Place;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1016,6 +1038,9 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Place.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
                 @Place.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
                 @Place.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlace;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1038,6 +1063,9 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Place.started += instance.OnPlace;
                 @Place.performed += instance.OnPlace;
                 @Place.canceled += instance.OnPlace;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -1200,6 +1228,7 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnMine(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

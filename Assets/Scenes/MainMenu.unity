@@ -325,7 +325,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 98018483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f6b857a40d7c045a9b65ed310128f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 90d2634d955f79f488f4c5038c1fa055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &98018485
@@ -648,7 +648,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 303135394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f6b857a40d7c045a9b65ed310128f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 90d2634d955f79f488f4c5038c1fa055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &303135396
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 549317748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f6b857a40d7c045a9b65ed310128f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 90d2634d955f79f488f4c5038c1fa055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &564732328 stripped
@@ -1243,7 +1243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 840322726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b27887611aaf4a34691d46b337508dc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ca054ed884c4e64b8936bc4cb0e050b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timerDuration: 2
@@ -1905,7 +1905,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1193955913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0a758f3e5013ec48a8f4abf34ebdc95, type: 3}
+  m_Script: {fileID: 11500000, guid: 12129e1c579acae429f7d3a3d621bf84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timerDuration: 2
@@ -2016,7 +2016,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1458698417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f6b857a40d7c045a9b65ed310128f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 90d2634d955f79f488f4c5038c1fa055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1458698419
@@ -2476,7 +2476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48633ceb8229894494c2164059351f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 10000
+  maxDistance: 60
 --- !u!114 &1671978554
 MonoBehaviour:
   m_ObjectHideFlags: 0
