@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockDistribution
@@ -43,6 +41,7 @@ public class TerrainChunk : MonoBehaviour
 
         List<Vector3> verts = new List<Vector3>();
         List<int> tris = new List<int>();
+        List<Vector2> uvs = new List<Vector2>();
 
         for (int x = 1; x < CHUNK_SIZE + 1; x++)
             for (int z = 1; z < CHUNK_SIZE + 1; z++)
@@ -53,63 +52,75 @@ public class TerrainChunk : MonoBehaviour
                         Vector3 blockPos = new Vector3(x - 1, y, z - 1);
                         int numFaces = 0;
                         //no land above, build top face
-                        if (y < CHUNK_HEIGHT - 1 && Blocks[x, y + 1, z] == 0)
+                        if (y < CHUNK_HEIGHT - 1 && Blocks[x, y + 1, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 1, 0));
                             verts.Add(blockPos + new Vector3(0, 1, 1));
                             verts.Add(blockPos + new Vector3(1, 1, 1));
                             verts.Add(blockPos + new Vector3(1, 1, 0));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].topPos.GetUVs());
                         }
 
                         //bottom
-                        if (y > 0 && Blocks[x, y - 1, z] == 0)
+                        if (y > 0 && Blocks[x, y - 1, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 0));
                             verts.Add(blockPos + new Vector3(1, 0, 0));
                             verts.Add(blockPos + new Vector3(1, 0, 1));
                             verts.Add(blockPos + new Vector3(0, 0, 1));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].bottomPos.GetUVs());
                         }
 
                         //front
-                        if (Blocks[x, y, z - 1] == 0)
+                        if (Blocks[x, y, z - 1] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 0));
                             verts.Add(blockPos + new Vector3(0, 1, 0));
                             verts.Add(blockPos + new Vector3(1, 1, 0));
                             verts.Add(blockPos + new Vector3(1, 0, 0));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //right
-                        if (Blocks[x + 1, y, z] == 0)
+                        if (Blocks[x + 1, y, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(1, 0, 0));
                             verts.Add(blockPos + new Vector3(1, 1, 0));
                             verts.Add(blockPos + new Vector3(1, 1, 1));
                             verts.Add(blockPos + new Vector3(1, 0, 1));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //back
-                        if (Blocks[x, y, z + 1] == 0)
+                        if (Blocks[x, y, z + 1] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(1, 0, 1));
                             verts.Add(blockPos + new Vector3(1, 1, 1));
                             verts.Add(blockPos + new Vector3(0, 1, 1));
                             verts.Add(blockPos + new Vector3(0, 0, 1));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //left
-                        if (Blocks[x - 1, y, z] == 0)
+                        if (Blocks[x - 1, y, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 1));
                             verts.Add(blockPos + new Vector3(0, 1, 1));
                             verts.Add(blockPos + new Vector3(0, 1, 0));
                             verts.Add(blockPos + new Vector3(0, 0, 0));
                             numFaces++;
+
+                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         int tl = verts.Count - 4 * numFaces;
@@ -129,6 +140,7 @@ public class TerrainChunk : MonoBehaviour
 
         mesh.vertices = verts.ToArray();
         mesh.triangles = tris.ToArray();
+        mesh.uv = uvs.ToArray();
 
         mesh.RecalculateNormals();
 

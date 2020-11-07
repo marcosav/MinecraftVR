@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem.Controls;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,12 +6,8 @@ public class PlayerMovement : MonoBehaviour
     public MinecraftVR controls;
 
     public float jumpSpeed = 5.3f;
-    public float checkRadius = .2f;
     public float sprintMultiplier = 1.3f;
     public float speed = 4.5f;
-
-    public Transform groundChecker;
-    public LayerMask groundLayer;
 
     private float g = 9.81f;
 
@@ -44,6 +37,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < -20)
+        {
+            cntrl.Move(new Vector3(1, 200, 1));
+            return;
+        }
+
         Vector2 input = controls.Player.Move.ReadValue<Vector2>();
         float x = input.x;
         float z = input.y;
@@ -51,12 +50,8 @@ public class PlayerMovement : MonoBehaviour
         bool sprint = controls.Player.Sprint.ReadValue<float>() == 1;
         bool jump = controls.Player.Jump.ReadValue<float>() == 1;
 
-#if UNITY_EDITOR
-        Vector3 dir = Camera.main.transform.right * x + Camera.main.transform.forward * z;
-#else
-        var c = GvrVRHelpers.GetHeadRotation();
+        var c = PlayerLook.GetRotation();
         Vector3 dir = c * Vector3.right * x + c * Vector3.forward * z;
-#endif
 
         bool grounded = IsOnGround();
 
@@ -83,9 +78,5 @@ public class PlayerMovement : MonoBehaviour
         cntrl.Move(dir * Time.deltaTime);
     }
 
-    bool IsOnGround()
-    {
-        Collider[] colliders = Physics.OverlapSphere(groundChecker.position, checkRadius, groundLayer);
-        return colliders.Length > 0;
-    }
+    bool IsOnGround() => cntrl.isGrounded;
 }

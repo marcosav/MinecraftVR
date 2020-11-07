@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class ContinueButton : ButtonColliderClick
 {
-    public override void OnClick()
-    {
-        GetComponentInParent<GameMenu>().Toggle();
-    }
+    public override void OnClick() => GetComponentInParent<GameMenu>().Toggle();
 }

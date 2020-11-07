@@ -47,12 +47,8 @@ public class Terraforming : MonoBehaviour
         if (clicking && (DateTimeOffset.Now.ToUnixTimeMilliseconds() - last >= delay || !used))
         {
 
-#if UNITY_EDITOR
-            Vector3 dir = Camera.main.transform.forward;
-#else
-            var c = GvrVRHelpers.GetHeadRotation();
+            var c = PlayerLook.GetRotation();
             Vector3 dir = c * Vector3.forward;
-#endif
 
             if (Physics.Raycast(Camera.main.transform.position, dir, out RaycastHit hit, interactDist, groundLayer))
             {
@@ -63,7 +59,7 @@ public class Terraforming : MonoBehaviour
 
                 Vector3 target = hit.point + dir * .01f;
 
-                if (place && IsSameBlock(target, player.position))
+                if (place && CannotPlace(target, player.position))
                     return;
 
                 ChunkPos pos = terrainGenerator.GetChunkPosition(target);
@@ -74,10 +70,13 @@ public class Terraforming : MonoBehaviour
                 int biz = Mathf.FloorToInt(target.z) - pos.z + 1;
 
                 if (mine)
-                    tc.Blocks[bix, biy, biz] = BlockType.Air;
+                {
+                    if (CanBreak(tc.Blocks[bix, biy, biz]))
+                        tc.Blocks[bix, biy, biz] = BlockType.Air;
+                }
                 else
                 {
-                    tc.Blocks[bix, biy, biz] = BlockType.Grass;
+                    tc.Blocks[bix, biy, biz] = BlockType.Cobblestone;
                 }
 
                 last = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -90,10 +89,20 @@ public class Terraforming : MonoBehaviour
             used = false;
     }
 
+    private bool CannotPlace(Vector3 target, Vector3 playerPos)
+    {
+        return IsSameBlock(target, playerPos) || IsSameBlock(target, playerPos + new Vector3(0, 1, 0));
+    }
+
     private bool IsSameBlock(Vector3 a, Vector3 b)
     {
         return Math.Floor(a.x) == Math.Floor(b.x) &&
-        Math.Floor(a.y) == Math.Floor(b.y) &&
-        Math.Floor(a.z) == Math.Floor(b.z);
+            Math.Floor(a.y) == Math.Floor(b.y) &&
+            Math.Floor(a.z) == Math.Floor(b.z);
+    }
+
+    private bool CanBreak(BlockType type)
+    {
+        return type != BlockType.Baserock;
     }
 }

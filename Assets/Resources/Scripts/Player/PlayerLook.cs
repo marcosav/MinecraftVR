@@ -6,12 +6,10 @@ public class PlayerLook : MonoBehaviour
 
     public MinecraftVR controls;
 
-    public Transform cam;
-
     public float sensitivity = .55f;
     public float inverted = -1f;
 
-    private float headRotation = 0f;
+    private float headRotationX, headRotationY;
     private readonly float headRotationLimit = 90f;
 
     void Start()
@@ -39,11 +37,22 @@ public class PlayerLook : MonoBehaviour
         float x = input.x * sensitivity;
         float y = input.y * sensitivity * inverted;
 
-        transform.Rotate(0f, x, 0f);
-        headRotation += y;
-        headRotation = Mathf.Clamp(headRotation, -headRotationLimit, headRotationLimit);
-        cam.localEulerAngles = new Vector3(headRotation, 0f, 0f);
+        //transform.Rotate(0f, x, 0f);
+        headRotationY += y;
+        headRotationX += x;
+
+        headRotationY = Mathf.Clamp(headRotationY, -headRotationLimit, headRotationLimit);
+        Camera.main.transform.localEulerAngles = new Vector3(headRotationY, headRotationX, 0f);
     }
 
 #endif
+
+    public static Quaternion GetRotation()
+    {
+#if UNITY_EDITOR
+        return Camera.main.transform.rotation;
+#else
+        return GvrVRHelpers.GetHeadRotation();
+#endif
+    }
 }

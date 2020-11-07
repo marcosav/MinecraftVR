@@ -2,7 +2,6 @@
 
 public class SaveExitButton : ButtonColliderClick
 {
-
     public TerrainGenerator terrainGenerator;
 
     public override void OnClick()

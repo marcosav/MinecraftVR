@@ -9,16 +9,13 @@ public class GameMenu : MonoBehaviour
     public Transform player;
 
     private PlayerBehavior playerBehavior;
-    private CharacterController cntrl;
 
     public bool Open { get; private set; } = false;
 
-    private Vector3 oldPosition;
     private float oldFarClipPlane;
 
     void Start()
     {
-        cntrl = player.GetComponent<CharacterController>();
         playerBehavior = player.GetComponent<PlayerBehavior>();
 
         LockMouse(true);
@@ -36,42 +33,42 @@ public class GameMenu : MonoBehaviour
     {
         Open = !Open;
 
-        playerBehavior?.Enable(!Open);
-
-        gameObject.SetActive(Open);
-
         if (Open)
         {
-            oldPosition = cntrl.center;
+            gameObject.SetActive(true);
+            playerBehavior?.Enable(false);
+
             oldFarClipPlane = Camera.main.farClipPlane;
 
             StartCoroutine(Move());
         }
         else
-        {
-            cntrl.Move(oldPosition - new Vector3(0, 200, 0));
-        }
+            StartCoroutine(Restore());
 
         Camera.main.farClipPlane = Open ? CAMERA_DISTANCE : oldFarClipPlane;
     }
 
     private IEnumerator Move()
     {
-        yield return new WaitForFixedUpdate();
-        cntrl.Move(new Vector3(oldPosition.x, 200, oldPosition.z));
+        player.position += new Vector3(0, 250, 0);
 
         yield return new WaitForFixedUpdate();
 
-#if UNITY_EDITOR
-        Quaternion rot = Camera.main.transform.rotation;
-#else
-        Quaternion rot = GvrVRHelpers.GetHeadRotation();
-#endif
-
+        Quaternion rot = PlayerLook.GetRotation();
         Vector3 dir = rot * Vector3.forward;
 
         transform.position = player.position + dir * 20;
         transform.rotation = rot;
+    }
+
+    private IEnumerator Restore()
+    {
+        player.position -= new Vector3(0, 250, 0);
+
+        yield return new WaitForFixedUpdate();
+
+        playerBehavior?.Enable(true);
+        gameObject.SetActive(false);
     }
 
     private void LockMouse(bool b)

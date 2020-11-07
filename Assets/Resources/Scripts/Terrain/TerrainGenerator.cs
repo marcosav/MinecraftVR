@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -59,18 +60,80 @@ public class TerrainGenerator : MonoBehaviour
 
     private BlockDistribution GenerateBlockDistribution(ChunkPos pos)
     {
-        float height;
+        var rnd = new System.Random(persistor.GetSeed() - pos.x * 31 - pos.z * 23);
+        double height;
         BlockDistribution blocks = new BlockDistribution();
+
+        bool hasTree = false;
 
         for (int x = 0; x < TerrainChunk.CHUNK_SIZE + 2; x++)
             for (int z = 0; z < TerrainChunk.CHUNK_SIZE + 2; z++)
             {
-                height = ComputeHeightAt(pos.x + x - 1, pos.z + z - 1);
+                height = Math.Floor(ComputeHeightAt(pos.x + x - 1, pos.z + z - 1));
                 for (int y = 0; y < TerrainChunk.CHUNK_HEIGHT; y++)
-                    blocks[x, y, z] = height < y ? BlockType.Air : BlockType.Grass;
+                    blocks[x, y, z] = GetForHeight(y, height);
+
+                if (!hasTree && x > 4 && x < 12 && z > 4 && z < 12)
+                {
+                    int r = rnd.Next(1, 115 + (int)Math.Pow(height, height / 65.0));
+                    if (r == 2)
+                    {
+                        hasTree = true;
+                        GenerateTree(rnd, blocks, x, (int)height + 1, z);
+                    }
+                }
             }
 
         return blocks;
+    }
+
+    private BlockType GetForHeight(int y, double height)
+    {
+        if (y > height)
+            return BlockType.Air;
+
+        if (y == 0)
+            return BlockType.Baserock;
+
+        if (height == y)
+            return BlockType.Grass;
+
+        if (y > height - 5)
+            return BlockType.Dirt;
+
+        return BlockType.Stone;
+    }
+
+    private void GenerateTree(System.Random r, BlockDistribution blocks, int x, int y, int z)
+    {
+        int t = r.Next(2, 5);
+        int h = r.Next(4, 6);
+        int w = r.Next(1, 4);
+        int w2 = r.Next(1, 4);
+
+        int hh = w + w2 >= 4 ? 1 : 0;
+
+        for (int k = y + 2 + hh; k <= y + h + hh; k++)
+        {
+            if (k == y + h)
+            {
+                w2 -= Math.Min(1, r.Next(3));
+                w -= r.Next(2);
+
+            }
+            else if (k == y + h - 1 && r.Next(3) < 2)
+            {
+                w2 -= Math.Max(0, r.Next(-1, 2));
+                w -= Math.Max(0, r.Next(-1, 2));
+            }
+
+            for (int i = x - w2; i <= x + w; i++)
+                for (int j = z - w; j <= z + w2; j++)
+                    blocks[i, k, j] = BlockType.Leaves;
+        }
+
+        for (int i = 0; i < t; i++)
+            blocks[x - 1, y + i, z] = BlockType.Log;
     }
 
     void BuildChunk(ChunkPos pos)
