@@ -73,6 +73,22 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PreviousItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6ce61be-b4ec-49dc-88b3-493dc5b119c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""NextItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae3edfd3-fd32-4980-9d09-d5366e739e63"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -331,12 +347,56 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5dbd714c-8276-467e-9b22-05fc5a85d3ba"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""2699e029-0fcd-4982-9ee9-12e7e7bffcfd"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a52eab7-4020-47c2-9d72-487835e4c2a1"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PreviousItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4008a2e9-92d3-4349-a442-800cb858c957"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PreviousItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4fc29890-9d8e-4c40-b1f3-9ed775ccae52"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""NextItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0dc6ea56-bcd5-4580-9f02-b35688172f15"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NextItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -943,6 +1003,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         m_Player_Mine = m_Player.FindAction("Mine", throwIfNotFound: true);
         m_Player_Place = m_Player.FindAction("Place", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_PreviousItem = m_Player.FindAction("PreviousItem", throwIfNotFound: true);
+        m_Player_NextItem = m_Player.FindAction("NextItem", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
@@ -1011,6 +1073,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Mine;
     private readonly InputAction m_Player_Place;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_PreviousItem;
+    private readonly InputAction m_Player_NextItem;
     public struct PlayerActions
     {
         private @MinecraftVR m_Wrapper;
@@ -1022,6 +1086,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         public InputAction @Mine => m_Wrapper.m_Player_Mine;
         public InputAction @Place => m_Wrapper.m_Player_Place;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @PreviousItem => m_Wrapper.m_Player_PreviousItem;
+        public InputAction @NextItem => m_Wrapper.m_Player_NextItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1052,6 +1118,12 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @PreviousItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPreviousItem;
+                @PreviousItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPreviousItem;
+                @PreviousItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPreviousItem;
+                @NextItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNextItem;
+                @NextItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNextItem;
+                @NextItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNextItem;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1077,6 +1149,12 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @PreviousItem.started += instance.OnPreviousItem;
+                @PreviousItem.performed += instance.OnPreviousItem;
+                @PreviousItem.canceled += instance.OnPreviousItem;
+                @NextItem.started += instance.OnNextItem;
+                @NextItem.performed += instance.OnNextItem;
+                @NextItem.canceled += instance.OnNextItem;
             }
         }
     }
@@ -1240,6 +1318,8 @@ public class @MinecraftVR : IInputActionCollection, IDisposable
         void OnMine(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnPreviousItem(InputAction.CallbackContext context);
+        void OnNextItem(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

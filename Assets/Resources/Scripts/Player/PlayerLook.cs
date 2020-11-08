@@ -16,20 +16,9 @@ public class PlayerLook : MonoBehaviour
     {
     }
 
-    protected void Awake()
-    {
-        controls = new MinecraftVR();
-    }
-
-    protected void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    protected void OnDisable()
-    {
-        controls.Disable();
-    }
+    protected void Awake() => controls = new MinecraftVR();
+    protected void OnEnable() => controls.Enable();
+    protected void OnDisable() => controls.Disable();
 
     void Update()
     {
@@ -37,7 +26,6 @@ public class PlayerLook : MonoBehaviour
         float x = input.x * sensitivity;
         float y = input.y * sensitivity * inverted;
 
-        //transform.Rotate(0f, x, 0f);
         headRotationY += y;
         headRotationX += x;
 

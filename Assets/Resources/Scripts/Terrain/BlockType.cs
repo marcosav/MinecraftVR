@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 public enum BlockType : byte
 {
 
@@ -11,4 +14,19 @@ public enum BlockType : byte
     Sand = 7,
     Gravel = 8,
     Cobblestone = 9
+}
+
+public class Block
+{
+    private static Dictionary<BlockType, string> Init()
+    {
+        _name = new Dictionary<BlockType, string>();
+        foreach (var n in Enum.GetNames(typeof(BlockType)))
+            _name.Add((BlockType)Enum.Parse(typeof(BlockType), n), n);
+        return _name;
+    }
+
+    private static Dictionary<BlockType, string> _name;
+
+    public static Dictionary<BlockType, string> Name { get => _name ?? Init(); set { } }
 }

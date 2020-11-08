@@ -4,15 +4,16 @@ using UnityEngine;
 public class Terraforming : MonoBehaviour
 {
 
+    private const long DELAY = 200;
+
     public MinecraftVR controls;
 
     public Transform player;
     public LayerMask groundLayer;
     public readonly float interactDist = 4;
 
-    private readonly long delay = 200;
-
     private TerrainGenerator terrainGenerator;
+    private Inventory inventory;
 
     private bool used;
     private long last = -1;
@@ -20,22 +21,12 @@ public class Terraforming : MonoBehaviour
     void Start()
     {
         terrainGenerator = GetComponent<TerrainGenerator>();
+        inventory = player.GetComponent<Inventory>();
     }
 
-    protected void Awake()
-    {
-        controls = new MinecraftVR();
-    }
-
-    protected void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    protected void OnDisable()
-    {
-        controls.Disable();
-    }
+    protected void Awake() => controls = new MinecraftVR();
+    protected void OnEnable() => controls.Enable();
+    protected void OnDisable() => controls.Disable();
 
     void Update()
     {
@@ -44,7 +35,7 @@ public class Terraforming : MonoBehaviour
 
         bool clicking = mine || place;
 
-        if (clicking && (DateTimeOffset.Now.ToUnixTimeMilliseconds() - last >= delay || !used))
+        if (clicking && (DateTimeOffset.Now.ToUnixTimeMilliseconds() - last >= DELAY || !used))
         {
 
             var c = PlayerLook.GetRotation();
@@ -76,7 +67,7 @@ public class Terraforming : MonoBehaviour
                 }
                 else
                 {
-                    tc.Blocks[bix, biy, biz] = BlockType.Cobblestone;
+                    tc.Blocks[bix, biy, biz] = inventory.Current;
                 }
 
                 last = DateTimeOffset.Now.ToUnixTimeMilliseconds();

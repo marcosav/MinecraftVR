@@ -31,12 +31,15 @@ public class GameMenu : MonoBehaviour
 
     public void Toggle()
     {
+        if (!Open && !playerBehavior.Enabled)
+            return;
+
         Open = !Open;
 
         if (Open)
         {
             gameObject.SetActive(true);
-            playerBehavior?.Enable(false);
+            playerBehavior.Enable(false);
 
             oldFarClipPlane = Camera.main.farClipPlane;
 

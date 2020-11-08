@@ -60,7 +60,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(1, 1, 0));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].topPos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].topPos.GetUVs());
                         }
 
                         //bottom
@@ -72,7 +72,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(0, 0, 1));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].bottomPos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].bottomPos.GetUVs());
                         }
 
                         //front
@@ -84,7 +84,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(1, 0, 0));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //right
@@ -96,7 +96,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(1, 0, 1));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //back
@@ -108,7 +108,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(0, 0, 1));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         //left
@@ -120,7 +120,7 @@ public class TerrainChunk : MonoBehaviour
                             verts.Add(blockPos + new Vector3(0, 0, 0));
                             numFaces++;
 
-                            uvs.AddRange(Block.blocks[Blocks[x, y, z]].sidePos.GetUVs());
+                            uvs.AddRange(BlockTiles.find[Blocks[x, y, z]].sidePos.GetUVs());
                         }
 
                         int tl = verts.Count - 4 * numFaces;

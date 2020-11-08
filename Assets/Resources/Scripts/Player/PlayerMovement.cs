@@ -20,26 +20,15 @@ public class PlayerMovement : MonoBehaviour
         cntrl = GetComponent<CharacterController>();
     }
 
-    protected void Awake()
-    {
-        controls = new MinecraftVR();
-    }
-
-    protected void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    protected void OnDisable()
-    {
-        controls.Disable();
-    }
+    protected void Awake() => controls = new MinecraftVR();
+    protected void OnEnable() => controls.Enable();
+    protected void OnDisable() => controls.Disable();
 
     void Update()
     {
         if (transform.position.y < -20)
         {
-            cntrl.Move(new Vector3(1, 200, 1));
+            transform.position += new Vector3(1, 200, 1);
             return;
         }
 

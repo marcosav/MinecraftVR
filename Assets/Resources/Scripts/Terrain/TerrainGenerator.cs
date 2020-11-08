@@ -25,6 +25,8 @@ public class TerrainGenerator : MonoBehaviour
 
     private ChunkPos curChunk = new ChunkPos(-1, -1);
 
+    private long built;
+
     void Start()
     {
         persistor = GetComponent<TerrainPersistor>();
@@ -34,6 +36,19 @@ public class TerrainGenerator : MonoBehaviour
         noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 
         Task.Factory.StartNew(BuildTask);
+
+        player.position = persistor.PlayerPosition;
+        StartCoroutine(SpawnTask());
+    }
+
+    private IEnumerator SpawnTask()
+    {
+        while (built < Math.Pow(chunkRenderDist * 2 + 1, 2))
+            yield return new WaitForSeconds(.5f);
+
+        //yield return new WaitForSeconds(.5f);
+
+        player.GetComponent<PlayerBehavior>().Enable(true);
     }
 
     private void Update() => LoadChunks();
@@ -132,7 +147,7 @@ public class TerrainGenerator : MonoBehaviour
                     blocks[i, k, j] = BlockType.Leaves;
         }
 
-        for (int i = 0; i < t; i++)
+        for (int i = 0; i < t + hh; i++)
             blocks[x - 1, y + i, z] = BlockType.Log;
     }
 
@@ -156,7 +171,9 @@ public class TerrainGenerator : MonoBehaviour
 
     void LoadChunks()
     {
-        ChunkPos playerChunk = GetChunkPosition(player.position);
+        var pp = player.position;
+        persistor.PlayerPosition = pp;
+        ChunkPos playerChunk = GetChunkPosition(pp);
 
         if (!curChunk.Equals(playerChunk))
         {
@@ -210,6 +227,8 @@ public class TerrainGenerator : MonoBehaviour
             chunks[job.pos] = job.chunk;
 
             job.chunk.gameObject.SetActive(true);
+
+            built++;
 
             yield return null;
         }

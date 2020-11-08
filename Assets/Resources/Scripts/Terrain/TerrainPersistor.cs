@@ -9,9 +9,12 @@ using UnityEngine;
 public class TerrainPersistor : MonoBehaviour
 {
 
+    public const int SAVE_DELAY = 60000;
     public const string FOLDER_NAME = "World";
     public const string WORLD_PROPERTIES = "info.properties";
-    private const int CACHE_SIZE = 222;
+    private const int CACHE_SIZE = 512;
+
+    public Vector3 PlayerPosition { get; set; } = new Vector3(0, 120, 0);
 
     private string path = FOLDER_NAME;
     private string infoFilePath;
@@ -39,7 +42,7 @@ public class TerrainPersistor : MonoBehaviour
         {
             while (true)
             {
-                Thread.Sleep(60000);
+                Thread.Sleep(SAVE_DELAY);
                 Save();
             }
         });
@@ -56,9 +59,7 @@ public class TerrainPersistor : MonoBehaviour
     private void InitPropertiesFile()
     {
         if (!File.Exists(infoFilePath))
-        {
-            File.WriteAllLines(infoFilePath, new string[] { "Seed=" + GetSeed() });
-        }
+            UpdatePopertiesFile();
         else
         {
             var props = new Dictionary<string, string>();
@@ -68,6 +69,7 @@ public class TerrainPersistor : MonoBehaviour
             try
             {
                 seed = int.Parse(props["Seed"]);
+                PlayerPosition = ReadVector3(props["PlayerPosition"]);
             }
             catch
             {
@@ -76,7 +78,26 @@ public class TerrainPersistor : MonoBehaviour
         }
     }
 
-    private string GetChunkFile(ChunkPos pos) => String.Format("chunk{0}_{1}.data", pos.x, pos.z);
+    private void UpdatePopertiesFile()
+    {
+        File.WriteAllLines(infoFilePath, new string[]
+                    {
+                "Seed=" + GetSeed(),
+                "PlayerPosition=" + GetPlayerPosition()
+                    });
+    }
+
+    private string GetPlayerPosition() => SerializeVector(PlayerPosition);
+
+    private string SerializeVector(Vector3 v) => string.Format("{0}_{1}_{2}", v.x, v.y, v.z);
+
+    private Vector3 ReadVector3(string input)
+    {
+        var tk = input.Split('_');
+        return new Vector3(float.Parse(tk[0]), float.Parse(tk[1]), float.Parse(tk[2]));
+    }
+
+    private string GetChunkFile(ChunkPos pos) => string.Format("chunk{0}_{1}.data", pos.x, pos.z);
 
     public BlockDistribution GetBlocksFor(ChunkPos pos, Func<ChunkPos, BlockDistribution> Generator)
     {
@@ -130,6 +151,8 @@ public class TerrainPersistor : MonoBehaviour
     {
         foreach (var c in chunkBlocks)
             SaveChunk(c.Key, c.Value);
+
+        UpdatePopertiesFile();
     }
 
     private void SaveChunk(ChunkPos pos, BlockDistribution blocks)
@@ -147,9 +170,7 @@ public class TerrainPersistor : MonoBehaviour
     private Action<Stream> BlocksToBytes(BlockDistribution blocks) => str =>
         {
             foreach (BlockType b in blocks)
-            {
                 str.WriteByte((byte)b);
-            }
             str.Flush();
         };
 

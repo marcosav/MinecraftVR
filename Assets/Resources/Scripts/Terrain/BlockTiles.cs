@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block
+public class BlockTiles
 {
-    public Tile top, side, bottom;
+    private readonly Tile top, side, bottom;
 
     public TilePos topPos, sidePos, bottomPos;
 
-    public Block(Tile tile) : this(tile, tile, tile) { }
+    private BlockTiles(Tile tile) : this(tile, tile, tile) { }
 
-    public Block(Tile top, Tile side, Tile bottom)
+    private BlockTiles(Tile top, Tile side, Tile bottom)
     {
         this.top = top;
         this.side = side;
@@ -18,23 +18,23 @@ public class Block
         GetPositions();
     }
 
-    void GetPositions()
+    private void GetPositions()
     {
         topPos = TilePos.tiles[top];
         sidePos = TilePos.tiles[side];
         bottomPos = TilePos.tiles[bottom];
     }
 
-    public static Dictionary<BlockType, Block> blocks = new Dictionary<BlockType, Block>(){
-        { BlockType.Grass, new Block(Tile.Grass, Tile.GrassSide, Tile.Dirt) },
-        { BlockType.Dirt, new Block(Tile.Dirt) },
-        { BlockType.Stone, new Block(Tile.Stone) },
-        { BlockType.Log, new Block(Tile.Log, Tile.LogSide, Tile.Log) },
-        { BlockType.Leaves, new Block(Tile.Leaves) },
-        { BlockType.Baserock, new Block(Tile.Baserock) },
-        { BlockType.Sand, new Block(Tile.Sand) },
-        { BlockType.Cobblestone, new Block(Tile.Cobblestone) },
-        { BlockType.Gravel, new Block(Tile.Gravel) },
+    public static Dictionary<BlockType, BlockTiles> find = new Dictionary<BlockType, BlockTiles>(){
+        { BlockType.Grass, new BlockTiles(Tile.Grass, Tile.GrassSide, Tile.Dirt) },
+        { BlockType.Dirt, new BlockTiles(Tile.Dirt) },
+        { BlockType.Stone, new BlockTiles(Tile.Stone) },
+        { BlockType.Log, new BlockTiles(Tile.Log, Tile.LogSide, Tile.Log) },
+        { BlockType.Leaves, new BlockTiles(Tile.Leaves) },
+        { BlockType.Baserock, new BlockTiles(Tile.Baserock) },
+        { BlockType.Sand, new BlockTiles(Tile.Sand) },
+        { BlockType.Cobblestone, new BlockTiles(Tile.Cobblestone) },
+        { BlockType.Gravel, new BlockTiles(Tile.Gravel) },
     };
 }
 
@@ -42,7 +42,7 @@ public class TilePos
 {
     private readonly Vector2[] uvs;
 
-    public TilePos(int xPos, int yPos)
+    private TilePos(int xPos, int yPos)
     {
         uvs = new Vector2[]
         {
