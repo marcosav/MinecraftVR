@@ -46,8 +46,6 @@ public class TerrainGenerator : MonoBehaviour
         while (built < Math.Pow(chunkRenderDist * 2 + 1, 2))
             yield return new WaitForSeconds(.5f);
 
-        //yield return new WaitForSeconds(.5f);
-
         player.GetComponent<PlayerBehavior>().Enable(true);
     }
 
@@ -172,7 +170,8 @@ public class TerrainGenerator : MonoBehaviour
     void LoadChunks()
     {
         var pp = player.position;
-        persistor.PlayerPosition = pp;
+        if (player.GetComponent<PlayerBehavior>().Enabled)
+            persistor.PlayerPosition = pp;
         ChunkPos playerChunk = GetChunkPosition(pp);
 
         if (!curChunk.Equals(playerChunk))

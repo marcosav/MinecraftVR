@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerDuration: 2
-  terrainGenerator: {fileID: 0}
+  terrainGenerator: {fileID: 220957755}
 --- !u!114 &163175014
 MonoBehaviour:
   m_ObjectHideFlags: 0
