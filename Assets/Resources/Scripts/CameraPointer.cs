@@ -27,8 +27,6 @@ public class CameraPointer : MonoBehaviour
 
     public float maxDistance = 10;
 
-#if !UNITY_EDITOR
-
     private GameObject _gazedAtObject = null;
 
     /// <summary>
@@ -43,10 +41,13 @@ public class CameraPointer : MonoBehaviour
             // GameObject detected in front of the camera.
             if (_gazedAtObject != hit.transform.gameObject)
             {
-                // New GameObject.
-                _gazedAtObject?.SendMessage("OnPointerExit", new GvrPointerEventData(null));
-                _gazedAtObject = hit.transform.gameObject;
-                _gazedAtObject?.SendMessage("OnPointerEnter", new GvrPointerEventData(null));
+                if (hit.transform.gameObject.CompareTag("Buttons"))
+                {
+                    // New GameObject.
+                    _gazedAtObject?.SendMessage("OnPointerExit", new GvrPointerEventData(null));
+                    _gazedAtObject = hit.transform.gameObject;
+                    _gazedAtObject?.SendMessage("OnPointerEnter", new GvrPointerEventData(null));
+                }
             }
         }
         else
@@ -62,5 +63,4 @@ public class CameraPointer : MonoBehaviour
             _gazedAtObject?.SendMessage("OnPointerClick", new GvrPointerEventData(null));
         }
     }
-#endif
 }

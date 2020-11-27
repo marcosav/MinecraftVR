@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 163175013}
   m_Layer: 0
   m_Name: SavePlay
-  m_TagString: Untagged
+  m_TagString: Buttons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 439220689}
   - component: {fileID: 439220688}
   - component: {fileID: 439220687}
+  - component: {fileID: 439220692}
   - component: {fileID: 439220691}
   - component: {fileID: 439220694}
   - component: {fileID: 439220690}
@@ -456,8 +457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc98909e9410e449b44f854bee0a318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 0.55
-  inverted: -1
 --- !u!114 &439220690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,6 +599,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingTX: {fileID: 1679967951}
+--- !u!114 &439220692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439220686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd5a9b1a6e119047aec75a46cf0099a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relativePosition: 0
 --- !u!4 &439220693
 Transform:
   m_ObjectHideFlags: 0
@@ -1118,7 +1130,7 @@ GameObject:
   - component: {fileID: 953704796}
   m_Layer: 0
   m_Name: Continue
-  m_TagString: Untagged
+  m_TagString: Buttons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -2,7 +2,7 @@
 
 public class PlayerLook : MonoBehaviour
 {
-#if UNITY_EDITOR
+/*#if false
 
     public MinecraftVR controls;
 
@@ -33,7 +33,7 @@ public class PlayerLook : MonoBehaviour
         Camera.main.transform.localEulerAngles = new Vector3(headRotationY, headRotationX, 0f);
     }
 
-#endif
+#endif*/
 
     public static Quaternion GetRotation()
     {

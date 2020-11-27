@@ -570,7 +570,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 761381335, guid: 463285ecd6702471a909ba810832bf0e, type: 3}
       propertyPath: m_Name
-      value: GvrEventSystem (1)
+      value: GvrEventSystem
       objectReference: {fileID: 0}
     - target: {fileID: 766346198, guid: 463285ecd6702471a909ba810832bf0e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1068,7 +1068,7 @@ GameObject:
   - component: {fileID: 840322734}
   m_Layer: 0
   m_Name: Exit
-  m_TagString: Untagged
+  m_TagString: Buttons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1375,6 +1375,10 @@ PrefabInstance:
       propertyPath: drawDebugRays
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 723926960, guid: 60270cf52a5e94998a5a335989159738, type: 3}
+      propertyPath: overridePointerCamera
+      value: 
+      objectReference: {fileID: 1671978550}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60270cf52a5e94998a5a335989159738, type: 3}
 --- !u!1 &916708384
@@ -1730,7 +1734,7 @@ GameObject:
   - component: {fileID: 1193955921}
   m_Layer: 0
   m_Name: Play
-  m_TagString: Untagged
+  m_TagString: Buttons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2383,6 +2387,7 @@ GameObject:
   - component: {fileID: 1671978553}
   - component: {fileID: 1671978552}
   - component: {fileID: 1671978554}
+  - component: {fileID: 1671978555}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2495,6 +2500,19 @@ MonoBehaviour:
   m_TrackingType: 1
   m_UpdateType: 0
   m_UseRelativeTransform: 0
+--- !u!114 &1671978555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671978548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd5a9b1a6e119047aec75a46cf0099a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relativePosition: 1
 --- !u!1001 &1716496028
 PrefabInstance:
   m_ObjectHideFlags: 0
